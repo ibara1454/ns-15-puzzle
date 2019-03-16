@@ -10,7 +10,6 @@
 </template>
 
 <script>
-
 import { SwipeDirection } from "tns-core-modules/ui/gestures";
 
 export default {
@@ -40,26 +39,19 @@ export default {
         onSwipe(event) {
             const index = this.numbers.map(el => {
                 return { index: el.index, text: el.text };
-            }).findIndex(el => {
-                // console.log(el.text);
-                return el.text === 16
-            });
+            }).findIndex(el => el.text === 16);
             console.log(`index: ${index}, direction: ${event.direction}`);
-            // console.log(event);
+
             const direction = event.direction;
             if (direction === SwipeDirection.left && index % 4 !== 3) {
                 this.swipeLeft(index + 1);
             } else if (direction === SwipeDirection.right && index % 4 !== 0) {
                 this.swipeRight(index - 1);
-            } else if (direction === SwipeDirection.up && index / 4 < 3) {
+            } else if (direction === SwipeDirection.up && Math.floor(index / 4) !== 3) {
                 this.swipeUp(index + 4);
-            } else if (direction === SwipeDirection.down && index / 4 >= 1) {
+            } else if (direction === SwipeDirection.down && Math.floor(index / 4) !== 0) {
                 this.swipeDown(index - 4);
             }
-            // Output the result after changed
-            // console.log(this.numbers.map(num => {
-            //     return { index: num.index, text: num.text };
-            // }));
         },
         swipeLeft(index) {
             const leftIndex = index - 1;
