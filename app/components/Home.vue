@@ -3,9 +3,8 @@
     <ActionBar class="action-bar">
         <Label class="action-bar-title" text="15 Puzzle"></Label>
     </ActionBar>
-
-    <FlexboxLayout id="container">
-        <Label v-for="{index, text} in numbers" :key="text" :text="text" :class="{ empty: text === 16 }" @swipe="onSwipe($event, index)"/>
+    <FlexboxLayout id="container" @swipe="onSwipe">
+        <Label v-for="{index, text} in numbers" :key="index" :text="text" :class="{ empty: text === 16 }" />
     </FlexboxLayout>
 </Page>
 </template>
@@ -13,8 +12,6 @@
 <script>
 
 import { SwipeDirection } from "tns-core-modules/ui/gestures";
-
-
 
 export default {
     data () {
@@ -33,27 +30,36 @@ export default {
                 { index: 10, text: 11 },
                 { index: 11, text: 12 },
                 { index: 12, text: 13 },
-                { index: 13, text: 14 },
-                { index: 14, text: 15 },
+                { index: 13, text: 15 },
+                { index: 14, text: 14 },
                 { index: 15, text: 16 },
             ],
         };
     },
     methods: {
-        onSwipe(event, index) {
-            console.log(index);
-            console.log(SwipeDirection)
+        onSwipe(event) {
+            const index = this.numbers.map(el => {
+                return { index: el.index, text: el.text };
+            }).findIndex(el => {
+                // console.log(el.text);
+                return el.text === 16
+            });
+            console.log(`index: ${index}, direction: ${event.direction}`);
             // console.log(event);
             const direction = event.direction;
-            if (direction === SwipeDirection.left) {
-                this.swipeLeft(index);
-            } else if (direction === SwipeDirection.right) {
-                this.swipeRight(index);
-            } else if (direction === SwipeDirection.up) {
-                this.swipeUp(index);
-            } else if (direction === SwipeDirection.down) {
-                this.swipeDown(index);
+            if (direction === SwipeDirection.left && index % 4 !== 3) {
+                this.swipeLeft(index + 1);
+            } else if (direction === SwipeDirection.right && index % 4 !== 0) {
+                this.swipeRight(index - 1);
+            } else if (direction === SwipeDirection.up && index / 4 < 3) {
+                this.swipeUp(index + 4);
+            } else if (direction === SwipeDirection.down && index / 4 >= 1) {
+                this.swipeDown(index - 4);
             }
+            // Output the result after changed
+            // console.log(this.numbers.map(num => {
+            //     return { index: num.index, text: num.text };
+            // }));
         },
         swipeLeft(index) {
             const leftIndex = index - 1;
@@ -101,6 +107,10 @@ export default {
     font-size: 20;
 }
 
+* > #container {
+    background-color: #555555;
+}
+
 #container {
     height: 360dpi;
     width: 360dpi;
@@ -115,11 +125,13 @@ export default {
 #container > * {
     font-size: 32;
     text-align: center;
-    background-color: white;
+    background-color: red;
     margin: 5;
     height: 75;
     width: 75;
     border-radius: 5;
+
+    transition: 1s linear 0;
 }
 
 #container > .empty {
