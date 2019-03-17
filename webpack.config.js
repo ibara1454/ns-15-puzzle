@@ -147,7 +147,17 @@ module.exports = env => {
             ],
         },
         module: {
-            rules: [{
+            rules: [
+                {
+                    enforce: "pre",
+                    test: /\.(js|vue)/,
+                    exclude: /node_modules/,
+                    loader: 'eslint-loader',
+                    options: {
+                        failOnError: true
+                    }
+                },
+                {
                     test: new RegExp(entryPath + ".(js|ts)"),
                     use: [
                         // Require all Android app components
