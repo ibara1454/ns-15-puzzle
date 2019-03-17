@@ -40,7 +40,6 @@ export default {
             const index = this.numbers.map(el => {
                 return { index: el.index, text: el.text };
             }).findIndex(el => el.text === 16);
-            console.log(`index: ${index}, direction: ${event.direction}`);
 
             const direction = event.direction;
             if (direction === SwipeDirection.left && index % 4 !== 3) {

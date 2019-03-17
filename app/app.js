@@ -1,4 +1,4 @@
-import Vue from "nativescript-vue";
+import Vue from "vue";
 
 import Home from "./components/Home";
 
